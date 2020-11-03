@@ -1,16 +1,33 @@
-#dino{
+.dino{
     position: absolute;
     width:60px;
     height:60px;
-    background-color: red;
+
     bottom:200px;
+    content:url('../img/trex.png');
 }
-
-
-#cactus{
+.cactus{
     width: 60px;
     height: 60px;
     position: absolute;
     bottom: 200px;
-    background-color: blue;
+
+    content:url('../img/cactus.png');
+}
+
+.bird{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    bottom: 300px;
+    content:url('../img/bird.png');
+}
+
+
+.crouch{
+    position: absolute;
+    width:60px;
+    height:30px;
+    bottom:200px;
+    content:url('../img/trexcrouch.png');
 }
