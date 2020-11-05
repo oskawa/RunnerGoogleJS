@@ -1,12 +1,17 @@
 const dino = document.querySelector('.dino')
 const grille = document.querySelector("#grille")
 const alert = document.getElementById("alert")
-
+var tabImages = new Array(2)
+var numImage=0
+tabImages[0] = "img/trex_run_left.png";
+tabImages[1] = "img/trex_run_right.png";
+tabImages[2] = "img/trexcrouch.png";
 let isJumping = false
 let isCrouch = false
 let gameOver = false
 let position = 0
 let gravity = 0.9
+var oui
 
 /* Action pour l'input flèche du haut */
 window.addEventListener("keydown", function(e) {
@@ -17,6 +22,7 @@ window.addEventListener("keydown", function(e) {
 
                 if (!isCrouch){
                     isCrouch = true
+                    isJumping = true
                     crouch()
                 }
             }
@@ -24,14 +30,14 @@ window.addEventListener("keydown", function(e) {
             break;
         case "ArrowUp":
             if (!gameOver){
-
-
             if (!isJumping){
                 isJumping = true
-                isCrouch = true
+                
                 jump()
+
             }
             }
+
 
             break;
         default:
@@ -43,11 +49,12 @@ window.addEventListener("keyup", function(e) {
     switch (e.key) {
         case "ArrowDown":
             if (!gameOver) {
-                console.log('vui')
+
 stand()
             }
 
             break;
+
         default:
     }
 }, true);
@@ -56,7 +63,7 @@ stand()
 function jump() {
 
     let count = 0
-
+    dino.style.content = "url('img/trex.png')"
     //Création d'un Timer qui agit toutes les 20 ms
     // Pour faire sauter et redescendre le dino
     let timerID = setInterval(function () {
@@ -85,42 +92,40 @@ function jump() {
          console.log(position)
      }, 20)
 
+
 }
 
 
 function crouch() {
-
-        isCrouch = true
-    dino.classList.add('crouch')
+clearTimeout(oui)
+    isCrouch = true
     dino.classList.remove('dino')
-    console.log('ACCROUPI TOI')
+    dino.classList.add('crouch')
+    dino.style.content = "url(" + tabImages[2] + ")"
 }
 
 function stand() {
-      dino.style.height = 60 + 'px'
-    console.log(dino.style.height)
+    isJumping = false
     isCrouch = false
     dino.classList.add('dino')
-    dino.classList.remove('crouch ')
-
+    dino.classList.remove('crouch')
+    dino.style.content = "url(" + tabImages[numImage] + ")"
+    if (numImage == 1) numImage = 0;
+    else numImage++;
+    oui = setTimeout("stand()", 20);
 }
-
-
 
 function generationObstacles() {
     randomGeneration = Math.random() * 4000
     randomObstacles = Math.random()
 
     if (randomObstacles<0.5){
-console.log('Inférieur')
-
     let positionCactus = 1000
     const cactus = document.createElement('div')
+
     if (!gameOver) cactus.classList.add('cactus')
     grille.appendChild(cactus)
     cactus.style.left = positionCactus + 'px'
-
-
     let timerID = setInterval(function () {
         if (positionCactus > 0 && positionCactus < 60 && position < 60){
             gameOver = true
@@ -130,9 +135,15 @@ console.log('Inférieur')
         }
         positionCactus -=10
         cactus.style.left = positionCactus + 'px'
+        if (positionCactus < 10) {
+            cactus.remove()
+
+        }
     },20)
-if (!gameOver) setTimeout(generationObstacles, randomGeneration)
-}else{
+
+        if (!gameOver) setTimeout(generationObstacles, randomGeneration)
+
+    }else{
         console.log('Supérieur')
         let positionBird = 1000
         const bird = document.createElement('div')
@@ -148,10 +159,18 @@ if (!gameOver) setTimeout(generationObstacles, randomGeneration)
              }
              positionBird -= 10
              bird.style.left = positionBird + 'px'
+             if (positionBird < 10) {
+                bird.remove()
+
+             }
         },20)
+
         if (!gameOver) setTimeout(generationObstacles, randomGeneration)
     }
+
 }
+
+
+
+
 generationObstacles()
-
-
